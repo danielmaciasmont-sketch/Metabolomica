@@ -1,0 +1,48 @@
+install.packages("pacman")
+#Pacman sirve para llamar o abrir otros paquetes, y #si no estan, los instala
+library("pacman")
+
+p_load("vroom",
+       "dplyr")
+Genes <-vroom(file="https://raw.githubusercontent.com/ManuelLaraMVZ/Transcript-mica/refs/heads/main/Genes.csv")
+
+Genes
+
+#Paso 1: Sacar el gen de referencia de la tabla 
+
+GR <- Genes %>% #Cmd+shift+m
+filter(Gen =="B-actina") #Dame la fila de la columna "Gen",
+                         #Pero solo de la celda que tiene el nombre "B-actina"
+
+GR
+
+GI <- Genes %>% 
+ slice(-1)
+
+GI
+
+Delta_Ct <- GI %>% 
+  mutate(DC1 = C1-GR$C1,
+         DC2 = C2-GR$C2,
+         DC3 = C3-GR$C3,
+         DT1 = T1-GR$T1,
+         DT2 = T2-GR$T2,
+         DT3 = T3-GR$T3) %>% 
+  select(-C1:-T3)
+
+ Delta_Ct
+
+ Dos_DCt <- Delta_Ct %>% 
+ mutate(DosDCT_C1 = 2^(-DC1),
+        DosDCT_C2 = 2^(-DC2),
+        DosDCT_C3 = 2^(-DC3),
+        DosDCT_T1 = 2^(-DT1),
+        DosDCT_T2 = 2^(-DT2),
+        DosDCT_T3 = 2^(-DT3)) %>% 
+  select(-2:-7) %>% 
+   mutate(DosDCT_Cx = (DosDCT_C1+DosDCT_C2+DosDCT_C3)/3,
+          DosDCT_Tx = (DosDCT_T1+DosDCT_T2+ DosDCT_T3)/3,
+          DosDDCT = DosDCT_Tx/DosDCT_Cx)
+  
+ Dos_DCt
+        
