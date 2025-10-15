@@ -1,0 +1,21 @@
+# Paquetes
+if(!require("pacman")) install.packages("pacman")
+library(pacman)
+p_load(vroom, ggplot2)
+
+# Cargar los datos de amplificación
+Amplif <- vroom("https://raw.githubusercontent.com/ManuelLaraMVZ/resultados_PCR_practica/refs/heads/main/Metabo_ago-dic2025_Amplif.csv")  
+
+# Graficar solo el pozo A3
+graficaAmp <- ggplot(Amplif, aes(x = Cycle, y = A3)) +
+  geom_line(color = "#1874CD", size = 0.7) +
+  geom_point(size = 0.8, color = "#EEE685") +
+  theme_classic() +
+  labs(
+    title = "Curva de amplificación - Pozo A3",
+    subtitle = "Testículo 100 µg",
+    caption = "Diseñado por Daniel Macias",
+    x = "Ciclo",
+    y = "Fluorescencia (RFU)"
+  )
+graficaAmp 
