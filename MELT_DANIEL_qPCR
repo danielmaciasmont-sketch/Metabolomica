@@ -1,0 +1,24 @@
+# Paquetes
+  if(!require("pacman")) install.packages("pacman")
+library(pacman)
+p_load(vroom, ggplot2)
+
+#Pasar los datos a mi gibhut en formato RAW
+#Cargar los datos de melting
+Melting <- vroom("https://raw.githubusercontent.com/ManuelLaraMVZ/resultados_PCR_practica/refs/heads/main/Metabo_ago-dic2025_Melting.csv")
+head(Melting)
+# Graficar solo el pozo A3
+graficaMelt<- ggplot(Melting, aes(x = Temperature, 
+                                  y = A3)) +
+  geom_line(color = "#7FFF00", size = 0.6) +
+  geom_point(size = 0.8, color = "#CD1076") +
+  theme_classic() +
+  labs(
+    title = "Curva de disociación - Pozo A3",
+    subtitle = "Testículo 100 µg",
+    caption = "Diseñado por Daniel M",
+    x = "Temperatura (°C)",
+    y = "Fluorescencia"
+  )
+graficaMelt
+
